@@ -26,6 +26,7 @@
       <div class="columns is-desktop is-mobile is-tablet is-multiline is-centered">
         <div
           class="column is-12-mobile is-4-desktop is-4-tablet"
+          @showModal="showModal"
           v-for="character of characters"
           v-bind:key="character.id"
         >
@@ -35,7 +36,10 @@
             </div>
             <div class="card-content">
               <h3 class="title is-size-4">{{ character.name }}</h3>
-              <button class="button is-success is-rounded is-small">Ver Mais</button>
+              <button
+                class="button is-success is-rounded is-small"
+                @click="showMore(character.id)"
+              >Ver Mais</button>
             </div>
           </div>
         </div>
@@ -67,7 +71,8 @@ export default {
       characters: [],
       page: 1,
       pages: 1,
-      search: []
+      search: [],
+      modal: false
     };
   },
   created() {
@@ -98,7 +103,14 @@ export default {
     searchData(search) {
       this.page = 1;
       this.fetch();
-    }
+    },
+    showMode(id) {
+      this.$emit("showModal", id);
+    },
+    showModal(id) {
+      this.fetchOne(id);
+    },
+    fetchOne(id) {}
   }
 };
 </script>
