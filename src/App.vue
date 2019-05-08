@@ -54,6 +54,28 @@
         <a class="pagination-next" v-on:click="changePage( page +1)">Próximo</a>
       </nav>
     </div>
+    <div class="modal" :class="{'is-active': modal }" v-if="modal">
+      <div class="modal-background" @click="modal=false;"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="model-card-title">Detalhes de: {{ currentCharacter.name }}</p>
+        </header>
+        <div class="modal card-body">
+          <p>Gênero</p>
+          <strong>{{currentCharacter.gender}}</strong>
+          <p>Estado</p>
+          <strong>{{ currentCharacter.status }}</strong>
+          <p>Especie</p>
+          <strong>{{ currentCharacter.statspeciesus }}</strong>
+          <p>Tipo</p>
+          <strong>{{currentCharacter.type }}</strong>
+        </div>
+
+        <footer class="modal-card-foot">
+          <button class="button" @click="modal=false;">Fechar</button>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -72,7 +94,8 @@ export default {
       page: 1,
       pages: 1,
       search: [],
-      modal: false
+      modal: false,
+      currentCharacter: {}
     };
   },
   created() {
@@ -110,7 +133,13 @@ export default {
     showModal(id) {
       this.fetchOne(id);
     },
-    fetchOne(id) {}
+    async fetchOne(id) {
+      let result = await axios.get(
+        `https://rickandmortyapi.com/api/character/${id}/`
+      );
+      this.currentCharacter = result.data;
+      this.modal = true;
+    }
   }
 };
 </script>
