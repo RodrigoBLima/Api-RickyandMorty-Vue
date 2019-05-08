@@ -6,7 +6,19 @@
           <span class="has-text-success">Rick and Morty</span>
           <span class="subtitle">Personagens</span>
         </h1>
-        <button class="button is-success is-rounded" v-on:click="fetch">aaaaa</button>
+        <div class="field has-addons is-pulled-right">
+          <div class="control">
+            <input
+              v-model="search"
+              type="text"
+              class="input is-rounded"
+              v-on:keyup.enter="searchData"
+            >
+          </div>
+          <div class="control">
+            <button class="button is-success is-rounded" v-on:click="searchData">Buscar</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -19,7 +31,7 @@
         >
           <div class="card">
             <div class="card-header">
-              <img v-bind:src="character.image" v-vind:alt="character.name">
+              <img v-bind:src="character.image" v-bind:alt="character.name">
             </div>
             <div class="card-content">
               <h3 class="title is-size-4">{{ character.name }}</h3>
@@ -48,12 +60,14 @@ import axios from "axios";
 
 export default {
   name: "App",
+
   //components: [Character],
   data() {
     return {
       characters: [],
       page: 1,
-      pages: 1
+      pages: 1,
+      search: []
     };
   },
   created() {
@@ -62,7 +76,8 @@ export default {
   methods: {
     fetch() {
       const paramn = {
-        page: this.page
+        page: this.page,
+        name: this.search
       };
       let result = axios
         .get("https://rickandmortyapi.com/api/character", { paramn })
@@ -78,6 +93,10 @@ export default {
     },
     chengePage(page) {
       this.ṕage = page <= 0 || page > this.pages ? this.page : page;
+      this.fetch();
+    },
+    searchData(search) {
+      this.page = 1;
       this.fetch();
     }
   }
